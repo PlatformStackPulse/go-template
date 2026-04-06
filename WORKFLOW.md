@@ -70,6 +70,52 @@ Lockdown: false (or true for restrictive mode)
   - Require status checks: all checks listed above ✅
    - Require branches up to date: ✅
 
+## Quick Apply via API (Script)
+
+You can apply the `main` branch protection policy in one command using:
+
+1. Export token with admin access to this repo:
+
+```bash
+export GITHUB_TOKEN=ghp_xxx
+```
+
+2. Run script:
+
+```bash
+chmod +x scripts/apply-branch-protection.sh
+scripts/apply-branch-protection.sh
+```
+
+Optional overrides:
+
+```bash
+GITHUB_OWNER=PlatformStackPulse GITHUB_REPO=go-template BRANCH=main scripts/apply-branch-protection.sh
+```
+
+## Quick Apply Checklist (GitHub UI)
+
+Use this exact list when selecting required status checks for branch protection on `main`:
+
+1. CI Pipeline / Lint & Format Check
+2. CI Pipeline / Test (1.21)
+3. CI Pipeline / Test (1.22)
+4. CI Pipeline / Security Scans
+5. CI Pipeline / Commit Lint
+6. CI Pipeline / Build
+7. CodeQL Analysis / Analyze
+
+Recommended additional protection toggles:
+
+1. Require a pull request before merging
+2. Require approvals: 1
+3. Dismiss stale pull request approvals when new commits are pushed
+4. Require conversation resolution before merging
+5. Require branches to be up to date before merging
+6. Include administrators
+7. Block force pushes
+8. Block branch deletion
+
 ## Automatic Remediation Workflows
 
 ### 1. Auto-Update Dependencies
