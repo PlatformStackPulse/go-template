@@ -1,8 +1,10 @@
+version: 2
+
 project_name: go-template
 
 release:
   draft: false
-  prerelease: false
+  prerelease: auto
   name_template: 'v{{.Version}}'
 
 builds:
@@ -25,14 +27,11 @@ builds:
       - -X github.com/PlatformStackPulse/go-template/pkg/version.GoVersion={{.Env.GOVERSION}}
 
 archives:
-  - format: tar.gz
+  - formats: ["tar.gz"]
     wrap_in_directory: true
-    goos:
-      - linux
-      - darwin
-  - format: zip
-    goos:
-      - windows
+    format_overrides:
+      - goos: windows
+        formats: ["zip"]
 
 checksum:
   name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
@@ -49,8 +48,8 @@ changelog:
 
 brews:
   - name: go-template
-    tap:
-      owner: example
+    repository:
+      owner: PlatformStackPulse
       name: homebrew-go-template
     homepage: 'https://github.com/PlatformStackPulse/go-template'
     description: 'Production-ready Go template'

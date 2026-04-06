@@ -7,12 +7,15 @@ Configure the following status checks on your main branch:
 ### Required Status Checks
 
 1. **CI Pipeline Checks:**
-   - `ci / lint` — Code linting must pass
-   - `ci / test` — All tests must pass
-   - `ci / security` — Security scans must pass
-   - `ci / codeql` — CodeQL analysis
-   - `ci / commit-lint` — Commit messages must follow Conventional Commits
-   - `ci / build` — Build must succeed
+  - `CI Pipeline / Lint & Format Check`
+  - `CI Pipeline / Test (1.21)`
+  - `CI Pipeline / Test (1.22)`
+  - `CI Pipeline / Security Scans`
+  - `CI Pipeline / Commit Lint`
+  - `CI Pipeline / Build`
+
+2. **Code scanning check:**
+  - `CodeQL Analysis / Analyze`
 
 ## Branch Protection Rules
 
@@ -27,18 +30,19 @@ Dismiss stale PR approvals: true
 
 # Require status checks to pass before merging
 Require status checks:
-  - ci/lint
-  - ci/test
-  - ci/security
-  - ci/codeql
-  - ci/commit-lint
-  - ci/build
+  - CI Pipeline / Lint & Format Check
+  - CI Pipeline / Test (1.21)
+  - CI Pipeline / Test (1.22)
+  - CI Pipeline / Security Scans
+  - CI Pipeline / Commit Lint
+  - CI Pipeline / Build
+  - CodeQL Analysis / Analyze
 
 # Require branches to be up to date before merging
 Require branches up to date: true
 
 # Include administrators
-Include administrators: false
+Include administrators: true
 
 # Allow force pushes
 Allow force pushes: false
@@ -63,7 +67,7 @@ Lockdown: false (or true for restrictive mode)
    - Apply to administrators: ✅
    - Require pull request reviews: 1 review ✅
    - Dismiss stale reviews: ✅
-   - Require status checks: All CI checks ✅
+  - Require status checks: all checks listed above ✅
    - Require branches up to date: ✅
 
 ## Automatic Remediation Workflows
@@ -152,4 +156,4 @@ Enable in `Settings` → `Security`:
 6. Release workflow auto-triggers
 7. Artifacts published to GitHub Releases
 
-For more information, see [CONTRIBUTING.md](../CONTRIBUTING.md) and [README.md](../README.md).
+For more information, see [CONTRIBUTING.md](CONTRIBUTING.md) and [README.md](README.md).

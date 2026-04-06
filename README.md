@@ -427,6 +427,12 @@ Weekly automated tasks:
 - Security vulnerability scans
 - Automated PR creation
 
+#### 4. **CodeQL Analysis** (`.github/workflows/codeql.yml`)
+Runs code scanning on pushes/PRs to `main` and on a weekly schedule.
+
+#### 5. **Changelog Update** (`.github/workflows/changelog.yml`)
+Updates `CHANGELOG.md` from Conventional Commits on pushes to `main`.
+
 ---
 
 ## 📚 Infrastructure Templates

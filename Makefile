@@ -28,7 +28,7 @@ run: build ## Build and run the application
 
 test: ## Run tests
 	@echo "Running tests..."
-	@go test -v -race -coverprofile=coverage.txt ./...
+	@go test -v -race -covermode=atomic -coverpkg=./internal/...,./pkg/... -coverprofile=coverage.txt ./test/...
 	@go tool cover -func=coverage.txt | tail -1
 
 test-unit: ## Run unit tests only
