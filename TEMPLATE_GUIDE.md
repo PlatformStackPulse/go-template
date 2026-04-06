@@ -1,153 +1,230 @@
-# Go Template - Setup Complete ✅
+# Go Template - Streamlined & Ready ✅
 
-## 📊 Template Statistics
+A **slim, production-ready** Go project template for CLI tools and API servers.
 
-- **Total Go Files**: 16 (code + tests)
-- **GitHub Actions Workflows**: 5 (CI, Release, Dependencies, CodeQL, Version Bump)
-- **Configuration Files**: 10+ (Makefile, Docker, Terraform, K8s, etc.)
-- **Documentation Files**: 8+ (README, CONTRIBUTING, SECURITY, etc.)
-- **Test Coverage**: Domain: 100%, Feature: 88.9%, Usecase: 76.5%
+## 📊 What's Included
 
----
+- **Go Files**: 13 (core + tests)
+- **Workflows**: 6 (CI, release, dependencies, CodeQL, version bump, changelog)
+- **Config Files**: 10+ (Makefile, Docker, Terraform, K8s examples)
+- **Documentation**: Clean and focused guides
+- **Test Coverage**: Enforced at 70% minimum
 
-## 📁 Complete Project Structure
+## 📁 Streamlined Project Structure
 
 ```
 go-template/
-├── 📄 Documentation
-│   ├── README.md              # Comprehensive guide with badges & examples
-│   ├── CONTRIBUTING.md        # Developer contribution guidelines
-│   ├── SECURITY.md            # Security policy & vulnerability reporting
-│   ├── WORKFLOW.md            # GitOps workflow & branch protection guide
-│   ├── LICENSE                # MIT License
-│   └── Makefile               # 20+ automation targets
-│
-├── 🏗️ Code Structure (Clean Architecture)
-│   ├── cmd/app/
-│   │   └── main.go            # Application entry point
-│   ├── internal/
-│   │   ├── cli/               # Cobra CLI framework
-│   │   │   ├── root.go
-│   │   │   ├── hello.go
-│   │   │   └── version.go
-│   │   ├── domain/            # Domain entities
-│   │   │   ├── greeter.go
-│   │   │   └── greeter_test.go
-│   │   ├── usecase/           # Business logic
-│   │   │   ├── greeting.go
-│   │   │   └── greeting_test.go
-│   │   ├── adapter/           # External integrations
-│   │   ├── config/            # Configuration management
-│   │   ├── feature/           # Feature flags system
-│   │   │   ├── flags.go
-│   │   │   ├── manager.go
-│   │   │   └── manager_test.go
-│   │   └── logger/            # Structured logging (slog)
-│   └── pkg/                   # Public packages
-│       ├── version/           # Version info (injected by build)
-│       └── health/            # Health check handlers
-│
-├── 🧪 Testing
-│   ├── test/unit/             # Unit test scaffolding
-│   └── test/integration/      # Integration test scaffolding
-│
-├── 🚀 CI/CD & DevOps
-│   ├── .github/
-│   │   ├── workflows/
-│   │   │   ├── ci.yml                # Lint, test, security, coverage
-│   │   │   ├── release.yml           # Multi-platform builds, GitHub Releases
-│   │   │   ├── dependencies.yml      # Weekly dependency updates & security scans
-│   │   │   ├── codeql.yml            # CodeQL analysis
-│   │   │   └── version-bump.yml      # Manual version bumping
-│   │   ├── actions/
-│   │   │   ├── check/action.yml      # Reusable check action
-│   │   │   └── build/action.yml      # Reusable build action
-│   │   ├── ISSUE_TEMPLATE/
-│   │   │   ├── bug_report.md
-│   │   │   └── feature_request.md
-│   │   ├── CODEOWNERS
-│   │   └── pull_request_template.md
-│   ├── .golangci.yml          # Linter configuration (strict rules)
-│   ├── .editorconfig          # Editor formatting standards
-│   ├── .gitconfig             # Git configuration
-│   └── docker-compose.yml     # Local development environment
-│
-├── 🐳 Containerization
-│   ├── Dockerfile             # Multi-stage production build
-│   └── .devcontainer/
-│       └── devcontainer.json  # Preconfigured dev environment
-│
-├── 📦 Release Automation
-│   └── .goreleaser.yml        # Multi-platform builds & release config
-│
-├── 🏗️ Infrastructure
-│   ├── deploy/
-│   │   ├── terraform/
-│   │   │   ├── main.tf              # AWS Lambda example
-│   │   │   ├── variables.tf
-│   │   │   └── terraform.dev.tfvars
-│   │   └── kubernetes/
-│   │       ├── deployment.yaml
-│   │       └── service.yaml
-│
-├── 🛠️ Build & Scripts
-│   ├── scripts/
-│   │   ├── build.sh           # Multi-platform build script
-│   │   ├── setup-hooks.sh     # Git hooks setup
-│   │   └── pre-commit         # Commit message validation
-│   └── build/                 # Build artifacts directory
-│
-└── 📦 Dependencies
-    ├── go.mod                 # Go module definition
-    └── go.sum                 # Dependency checksums
+├── cmd/app/
+│   └── main.go                 # Entry point (~25 lines, no bloat)
+├── internal/
+│   ├── cli/
+│   │   ├── root.go            # Root command
+│   │   └── hello.go           # Example command (remove/rename)
+│   ├── config/                # Configuration loading
+│   ├── domain/                # Domain entities
+│   ├── logger/                # Structured logging (slog)
+│   ├── usecase/               # Business logic
+│   └── adapter/               # External services (empty, add as needed)
+├── pkg/
+│   └── version/               # Version info (set at build)
+├── test/
+│   ├── unit/                  # Unit tests
+│   └── integration/           # Integration tests (scaffolding)
+├── deploy/
+│   ├── kubernetes/            # K8s manifests (optional example)
+│   └── terraform/             # IaC example (optional)
+├── .github/
+│   ├── workflows/             # GitHub Actions (production-grade)
+│   └── ISSUE_TEMPLATE/        # Issue templates
+├── Makefile                   # Build automation (core targets)
+├── Dockerfile                 # Multi-stage build
+├── go.mod / go.sum            # Dependencies
+└── README.md
 ```
 
----
+## 🎯 Design Philosophy
 
-## ✨ Key Features Implemented
+✅ **What's Included:**
+- Clean architecture (domain/usecase/adapter layers)
+- CLI framework (Cobra)
+- Structured logging (slog)
+- Configuration management
+- Comprehensive testing structure
+- Enterprise CI/CD (GitHub Actions)
+- Docker & multi-platform builds
+- DevContainer support
+- Security scanning (gosec, govulncheck, CodeQL)
+- Git hooks & branch protection
 
-### 1. 🏗️ Clean Architecture
-- **Domain Layer** — Pure business entities (`internal/domain/`)
-- **Usecase Layer** — Business logic (`internal/usecase/`)
-- **Adapter Layer** — External integrations (`internal/adapter/`)
-- **CLI Layer** — Command interface (Cobra)
+❌ **What's NOT Included (Keep it Slim!):**
+- Feature flag systems (add if needed per project)
+- Bloated example commands
+- Unused HTTP/health packages (add for API mode)
+- Over-engineered abstractions
+- Kubernetes/Terraform are optional examples only
 
-### 2. 🎯 CLI Framework
-- Cobra-based command structure
-- Example commands: `hello`, `version`
-- Extensible plugin-style architecture
-- Help and version support
+## 🌟 Key Features
 
-### 3. 🌟 Feature Flags System
-- Environment-based feature flag management
-- Support for multiple flags: `FEATURE_FLAGS=flag1=true,flag2=false`
-- Easy-to-extend architecture
-- Built-in flag definitions in `internal/feature/flags.go`
+### 1. **Clean Architecture**
+- **Domain**: Pure business entities (no external deps)
+- **Usecase**: Business logic (orchestrates domain)
+- **Adapter**: External integrations (DB, HTTP, queues)
+- **CLI**: User interface layer (Cobra)
 
-### 4. 📝 Structured Logging
-- Uses Go's standard `slog` package
+Each layer is **independent and testable**.
+
+### 2. **Two Modes: CLI or API**
+
+#### CLI Mode (Default)
+```go
+// Minimal main.go
+cfg := config.Load()
+log := logger.NewLogger(cfg.Debug)
+cmd := cli.NewRootCommand(log)
+cmd.ExecuteContext(ctx)
+```
+
+#### API Mode (Extend as Needed)
+```go
+// Add HTTP server in main.go
+srv := &http.Server{...}
+srv.ListenAndServe()
+```
+
+### 3. **Structured Logging**
+- Uses Go 1.21+ `slog` package
+- Context-aware logging
 - Debug and production modes
-- Contextual logging support
-- Structured output with key-value pairs
+- Easy to replace with other loggers (zap, logrus, etc.)
 
-### 5. 🧪 Testing Framework
-- **Unit Tests**: Table-driven tests in domain and usecase layers
-- **Integration Tests**: Scaffolding ready
-- **Test Coverage**: Enforced at 70% minimum in CI
-- **Dependencies**: `testify` for assertions
+### 4. **Configuration**
+- Environment-based loading
+- Debug mode toggle
+- Extensible design
+- Ready for YAML/env file support
 
-### 6. 🔐 Security & DevSecOps
-- **Linting**: golangci-lint with strict rules
-- **Security**: gosec for security issues detection
-- **Vulnerability Scanning**: govulncheck integration
-- **Static Analysis**: CodeQL analysis in CI
-- **Dependency Management**: Dependabot setup
-- **Secret Scanning**: GitHub secret scanning enabled
+### 5. **Testing Framework**
+- Unit tests (table-driven patterns)
+- Integration test scaffolding
+- Testify for assertions
+- 70% coverage enforcement in CI
 
-### 7. 🚀 CI/CD Automation
-- **CI Pipeline**: Lint, test, security, coverage checks
-- **Release Pipeline**: Multi-platform builds (Linux, macOS, Windows)
-- **Artifact Generation**: Checksums, SBOMs
+### 6. **Security & DevSecOps**
+- **Linting**: golangci-lint (13 linters enabled)
+- **Security**: gosec + govulncheck
+- **Code Analysis**: CodeQL integration
+- **Dependency Management**: Dependabot
+- **Branch Protection**: Pre-configured rules
+
+### 7. **CI/CD Pipeline**
+- Linting, testing, security checks
+- Multi-platform builds (macOS/Linux/Windows)
+- Docker image publishing
+- Automated versioning & releases
+- SBOM generation
+- Changelog automation
+
+## 🚀 Getting Started
+
+### 1. Use as Template
+```bash
+gh repo create my-app --template go-template
+cd my-app
+make dev-setup
+```
+
+### 2. Customize
+```bash
+# Update go.mod
+sed -i 's/go-template/my-app/g' go.mod
+
+# Remove example command
+rm internal/cli/hello.go
+
+# Create your command
+touch internal/cli/mycommand.go
+```
+
+### 3. Add Commands
+```go
+// internal/cli/mycommand.go
+func NewMyCommand(log *logger.Logger) *cobra.Command {
+	return &cobra.Command{
+		Use:   "mycommand",
+		Short: "...",
+		Run: func(cmd *cobra.Command, args []string) {
+			// Your logic
+		},
+	}
+}
+```
+
+Register in `cmd/app/main.go`:
+```go
+cmd.AddCommand(cli.NewMyCommand(log))
+```
+
+### 4. Test & Build
+```bash
+make test       # Run tests
+make coverage   # Coverage report
+make build      # Build binary
+make lint       # Lint check
+```
+
+## 📦 Adding Features
+
+### Adding Database Support
+1. Create `internal/persistence/repository.go`
+2. Implement concrete adapters in `internal/adapter/postgres/`
+3. Inject into usecases
+4. Update config for DB connection string
+
+### Adding HTTP API
+1. Create `internal/http/server.go`
+2. Add handlers in `internal/http/handlers.go`
+3. Update main.go to start server
+4. Add health checks if needed
+
+### Adding Async Jobs
+1. Create `internal/queue/` for abstraction
+2. Implement adapters in `internal/adapter/sqs/` or `internal/adapter/kafka/`
+3. Job logic in `internal/usecase/`
+
+### Adding Caching
+1. Create `internal/cache/repository.go`
+2. Implement in `internal/adapter/redis/`
+3. Use in usecases for performance
+
+## 🛠️ Common Tasks
+
+```bash
+# Setup
+make dev-setup          # Install dev tools
+make setup-hooks        # Install git hooks
+
+# Development
+make build             # Build binary
+make run              # Build and run
+make watch            # Watch mode (air)
+
+# Quality
+make test             # Run tests
+make coverage         # Coverage report
+make fmt              # Format code
+make lint             # Lint checks
+
+# Security
+make security         # Security scan
+
+# Release
+make release          # Multi-platform build
+make docker-build     # Docker image
+
+# Cleanup
+make clean            # Remove build artifacts
+make help             # Show all targets
+```
 - **Docker Image Push**: To GitHub Container Registry
 - **Automated Releases**: Based on semantic versioning tags
 

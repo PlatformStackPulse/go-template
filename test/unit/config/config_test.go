@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/PlatformStackPulse/go-template/internal/config"
 )
@@ -14,7 +15,8 @@ func TestLoadDefaults(t *testing.T) {
 	_ = os.Unsetenv("APP_NAME")
 	_ = os.Unsetenv("APP_VERSION")
 
-	cfg := config.Load()
+	cfg, err := config.Load()
+	require.NoError(t, err)
 
 	assert.False(t, cfg.Debug)
 	assert.Equal(t, "go-template", cfg.AppName)
@@ -31,7 +33,8 @@ func TestLoadFromEnv(t *testing.T) {
 		_ = os.Unsetenv("APP_VERSION")
 	}()
 
-	cfg := config.Load()
+	cfg, err := config.Load()
+	require.NoError(t, err)
 
 	assert.True(t, cfg.Debug)
 	assert.Equal(t, "my-app", cfg.AppName)
@@ -42,6 +45,7 @@ func TestInvalidBoolEnvFallsBack(t *testing.T) {
 	_ = os.Setenv("DEBUG", "notabool")
 	defer func() { _ = os.Unsetenv("DEBUG") }()
 
-	cfg := config.Load()
+	cfg, err := config.Load()
+	require.NoError(t, err)
 	assert.False(t, cfg.Debug)
 }

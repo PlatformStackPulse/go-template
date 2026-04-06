@@ -4,25 +4,19 @@ package cli
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/PlatformStackPulse/go-template/internal/feature"
 	"github.com/PlatformStackPulse/go-template/internal/logger"
 )
 
 // NewRootCommand creates the root command
-func NewRootCommand(log *logger.Logger, fm *feature.Manager) *cobra.Command {
+func NewRootCommand(log *logger.Logger) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "go-template",
-		Short: "Production-ready Go template application",
-		Long: `A production-ready Go template with CI/CD, DevSecOps,
-and architectural best practices built-in.`,
+		Short: "Go Template CLI",
+		Long:  `A production-ready Go CLI template for building scalable applications.`,
 	}
 
 	cmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
-		log.Debug("Command execution started", "command", cmd.Name())
-	}
-
-	cmd.PersistentPostRun = func(cmd *cobra.Command, args []string) {
-		log.Debug("Command execution completed", "command", cmd.Name())
+		log.Debug("Command started", "command", cmd.Name())
 	}
 
 	return cmd

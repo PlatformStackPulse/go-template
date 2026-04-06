@@ -10,9 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	appcli "github.com/PlatformStackPulse/go-template/internal/cli"
-	"github.com/PlatformStackPulse/go-template/internal/feature"
 	"github.com/PlatformStackPulse/go-template/internal/logger"
-	"github.com/PlatformStackPulse/go-template/pkg/version"
 )
 
 func captureStdout(t *testing.T, fn func()) string {
@@ -34,18 +32,15 @@ func captureStdout(t *testing.T, fn func()) string {
 
 func TestRootCommandMetadata(t *testing.T) {
 	log := logger.NewLogger(false)
-	fm := feature.NewManager()
-	cmd := appcli.NewRootCommand(log, fm)
+	cmd := appcli.NewRootCommand(log)
 
 	assert.Equal(t, "go-template", cmd.Use)
 	assert.NotNil(t, cmd.PersistentPreRun)
-	assert.NotNil(t, cmd.PersistentPostRun)
 }
 
-func TestHelloCommandOutput(t *testing.T) {
+func TestExampleCommandOutput(t *testing.T) {
 	log := logger.NewLogger(false)
-	fm := feature.NewManager()
-	cmd := appcli.NewHelloCommand(log, fm)
+	cmd := appcli.NewExampleCommand(log)
 
 	out := captureStdout(t, func() {
 		cmd.SetArgs([]string{"--name", "Dev"})
@@ -54,21 +49,4 @@ func TestHelloCommandOutput(t *testing.T) {
 	})
 
 	assert.True(t, strings.Contains(out, "Hello, Dev!"))
-}
-
-func TestVersionCommandOutput(t *testing.T) {
-	origVersion := version.Version
-	defer func() { version.Version = origVersion }()
-	version.Version = "v9.9.9"
-
-	log := logger.NewLogger(false)
-	cmd := appcli.NewVersionCommand(log)
-
-	out := captureStdout(t, func() {
-		cmd.SetArgs([]string{})
-		err := cmd.Execute()
-		assert.NoError(t, err)
-	})
-
-	assert.True(t, strings.Contains(out, "Version: v9.9.9"))
 }
