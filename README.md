@@ -1,153 +1,313 @@
 # Go Template
 
-![Go Version](https://img.shields.io/badge/Go-1.22+-blue?style=flat-square&logo=go)
+![Go Version](https://img.shields.io/badge/Go-1.23+-blue?style=flat-square&logo=go)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)
 ![CI Status](https://github.com/PlatformStackPulse/go-template/actions/workflows/ci.yml/badge.svg)
 [![codecov](https://codecov.io/gh/PlatformStackPulse/go-template/branch/main/graph/badge.svg)](https://codecov.io/gh/PlatformStackPulse/go-template)
 ![DevContainer](https://img.shields.io/static/v1?label=DevContainer&message=Ready&color=blue&style=flat-square&logo=visual-studio-code)
 
 <p align="center">
-  <strong>Production-Ready Go Template Repository</strong><br>
-  Enterprise-grade CI/CD, DevSecOps, GitOps workflow, clean architecture, and developer-first tooling.
+  <strong>Slim, Production-Ready Go Template</strong><br>
+  Enterprise CI/CD, DevSecOps, clean architecture. Optimized for CLI tools and API servers.
 </p>
 
 ---
 
 ## 🎯 Overview
 
-This repository is a **standardized, reusable GitHub template** for creating production-ready Go applications. It provides everything needed to build secure, scalable, single-binary command-line tools and platform utilities.
+A **minimal, reusable GitHub template** for building production-ready Go applications. Supports both **CLI single-binary projects** and **API servers** with zero bloat.
 
-### ✨ Highlights
+**What you get:**
+- ✅ Clean architecture (Domain/Usecase/Adapter layers)
+- ✅ CLI foundation (Cobra framework, ready for commands)
+- ✅ Structured logging (slog)
+- ✅ Configuration management
+- ✅ Comprehensive testing (unit, integration)
+- ✅ DevSecOps (gosec, govulncheck, CodeQL)
+- ✅ GitHub Actions CI/CD (linting, testing, releases)
+- ✅ Docker & multi-platform builds
+- ✅ DevContainer with pre-configured tools
+- ✅ Kubernetes & Terraform examples
 
-- ✅ **Clean Architecture** — Domain, Usecase, and Adapter layers
-- ✅ **CLI Framework** — Cobra-based command structure
-- ✅ **Feature Flags** — Built-in feature management system
-- ✅ **Structured Logging** — Using Go's standard `slog` package
-- ✅ **Comprehensive Testing** — Unit, integration, and example tests
-- ✅ **DevSecOps** — Integrated security scanning (gosec, govulncheck, CodeQL)
-- ✅ **CI/CD Automation** — GitHub Actions with linting, testing, coverage, and releases
-- ✅ **Semantic Versioning** — Automatic version management and release automation
-- ✅ **Conventional Commits** — Enforced commit message format
-- ✅ **DevContainer** — Pre-configured development environment
-- ✅ **Multi-Platform Builds** — macOS, Linux, Windows support
-- ✅ **Docker Support** — Multi-stage Dockerfile and docker-compose
-- ✅ **Infrastructure as Code** — Terraform and Kubernetes examples
-- ✅ **Code Quality** — golangci-lint, go vet, coverage enforcement
+**What you don't get (keep it slim!):**
+- No bloated feature flag systems
+- No unused HTTP health endpoints
+- No example commands cluttering the codebase
+- No over-engineered abstractions
 
 ---
 
 ## 🚀 Quick Start
 
-### Using as a GitHub Template
+### Using as GitHub Template
 
 ```bash
-# Create a new repository using this template
-gh repo create my-go-app --template go-template
+# Create a new repo from this template
+gh repo create my-app --template go-template
 
-# Clone and navigate
-git clone https://github.com/PlatformStackPulse/my-go-app
-cd my-go-app
-
-# Install development tools
+# Setup
+cd my-app
 make dev-setup
 
-# Run tests
-make test
-
-# Build
+# Build & run
 make build
-
-# Run
 ./bin/go-template hello --name "World"
 ```
 
-### Local Development
+### Example: Add Your First Command
 
-```bash
-# Setup development environment
-make dev-setup
+```go
+// internal/cli/mycommand.go
+package cli
 
-# Run in watch mode (requires air)
-make watch
+import (
+	"github.com/spf13/cobra"
+	"github.com/PlatformStackPulse/go-template/internal/logger"
+)
 
-# Tests with coverage
-make coverage
-
-# Security scan
-make security
-
-# Format and lint
-make fmt lint
+func NewMyCommand(log *logger.Logger) *cobra.Command {
+	return &cobra.Command{
+		Use:   "mycommand",
+		Short: "What my command does",
+		Run: func(cmd *cobra.Command, args []string) {
+			log.Info("Running mycommand")
+			// Your logic here
+		},
+	}
+}
 ```
 
-### Using DevContainer
-
-```bash
-# Open in DevContainer (VS Code)
-# Press Ctrl+Shift+P and select "Dev Containers: Reopen in Container"
-
-# Inside container:
-make install
-make test
-make build
+Then register in `cmd/app/main.go`:
+```go
+cmd.AddCommand(cli.NewMyCommand(log))
 ```
 
 ---
 
-## 📁 Project Structure
+## 📁 Lean Project Structure
 
 ```
 go-template/
-├── cmd/
-│   └── app/
-│       └── main.go             # Application entry point
+├── cmd/app/
+│   └── main.go                 # Entry point (minimal, ~30 lines)
 ├── internal/                   # Private packages
-│   ├── adapter/               # External integrations (HTTP, DB, etc.)
-│   ├── cli/                   # Cobra commands
-│   ├── config/                # Configuration management
+│   ├── cli/                    # Cobra commands
+│   │   ├── root.go            # Root command
+│   │   └── hello.go           # Example command (remove/rename)
+│   ├── config/                # Configuration loading
 │   ├── domain/                # Domain entities
-│   ├── feature/               # Feature flags system
-│   ├── logger/                # Structured logging
-│   └── usecase/               # Business logic
-├── pkg/                       # Public packages
-│   ├── health/                # Health check handlers
-│   └── version/               # Version information
+│   ├── logger/                # Structured logging (slog)
+│   ├── usecase/               # Business logic
+│   └── adapter/               # External integrations (add as needed)
+├── pkg/
+│   └── version/               # Version info (injected at build)
 ├── test/
-│   ├── integration/           # Integration tests
-│   └── unit/                  # Unit tests
+│   ├── unit/                  # Unit tests
+│   └── integration/           # Integration tests (if needed)
 ├── deploy/
-│   ├── kubernetes/            # Kubernetes manifests
-│   └── terraform/             # Terraform IaC
-├── scripts/                   # Build and utility scripts
-├── .devcontainer/             # DevContainer config
-├── .github/
-│   ├── workflows/             # GitHub Actions
-│   ├── ISSUE_TEMPLATE/        # Issue templates
-│   └── pull_request_template.md
-├── .golangci.yml              # Linter configuration
+│   ├── kubernetes/            # K8s manifests (optional)
+│   └── terraform/             # IaC (optional)
+├── Makefile                   # Core build targets
 ├── Dockerfile                 # Multi-stage build
-├── Makefile                   # Build automation
-├── go.mod / go.sum            # Dependency management
-└── README.md
+├── go.mod / go.sum            # Dependencies
+└── .github/workflows/         # GitHub Actions (6 workflows)
 ```
 
 ---
 
-## 🔄 Architecture
+## 🎯 Two Modes: CLI vs API
 
-### Clean Architecture Pattern
+### Mode 1: CLI (Single Binary)
+
+Your main.go stays **slim**:
+```go
+func main() {
+	cfg := config.Load()
+	log := logger.NewLogger(cfg.Debug)
+	cmd := cli.NewRootCommand(log)
+	cmd.Version = version.Version
+	
+	if err := cmd.ExecuteContext(context.Background()); err != nil {
+		os.Exit(1)
+	}
+}
+```
+
+**Add your commands** to `internal/cli/` and register them in `cmd/app/main.go`.
+
+### Mode 2: API Server
+
+Extend main.go with HTTP:
+```go
+func main() {
+	cfg := config.Load()
+	log := logger.NewLogger(cfg.Debug)
+	
+	// Create HTTP server
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: setupRoutes(log),
+	}
+	
+	// Run with graceful shutdown
+	// (add your HTTP handler logic)
+}
+```
+
+**Optional**: Add files as needed:
+- `internal/http/server.go` — HTTP server setup
+- `internal/http/handlers.go` — Route handlers  
+- `pkg/health/` — Health check endpoints
+
+---
+
+## 📐 Architecture
+
+**Clean layers** with clear separation:
 
 ```
-┌─────────────────────────────────────┐
-│           CLI Layer (Cobra)         │
-├─────────────────────────────────────┤
-│     Adapters (Ports & Adapters)     │
-├─────────────────────────────────────┤
-│      Usecases (Business Logic)      │
-├─────────────────────────────────────┤
-│       Domain (Entities & Rules)     │
-└─────────────────────────────────────┘
+CLI/HTTP Layer (User interaction)
+         ↓
+Usecases (Business logic)
+         ↓
+Domain (Entities, rules)
+         ↓
+Adapters (External services)
 ```
+
+Each layer is **independent and testable**.
+
+---
+
+## 🪵 Design Philosophy
+
+- **Slim** — Only essential structure, no bloat
+- **Extensible** — Easy to add features without refactoring
+- **Example-first** — Rename/remove example command, add yours
+- **Test-friendly** — Proper layering makes testing straightforward
+- **Single responsibility** — Each package does ONE thing well
+
+---
+
+## ⚙️ Common Tasks
+
+```bash
+make dev-setup       # Install tools
+make build           # Build binary
+make test            # Run tests
+make coverage        # Coverage report
+make fmt             # Format code
+make lint            # Lint check
+make security        # Security scan
+make docker-build    # Build Docker image
+```
+
+See [Makefile](Makefile) for all targets.
+
+---
+
+## 🔄 Customization Checklist
+
+When using this template:
+
+- [ ] Update `go.mod` module name
+- [ ] Rename `go-template` binary in `Makefile` and `README.md`
+- [ ] Remove/rename `internal/cli/hello.go` example command
+- [ ] Update repository references in documentation
+- [ ] Add your commands to `internal/cli/`
+- [ ] Update tests in `test/unit/`
+
+---
+
+## 📦 Deployment
+
+### Build for Production
+
+```bash
+make build                # Build locally
+make release             # Build all platforms (macOS/Linux/Windows)
+make docker-build        # Build Docker image
+```
+
+### Docker
+
+```dockerfile
+# Already configured in Dockerfile (multi-stage build)
+docker build -t my-app .
+docker run my-app hello --name "Docker"
+```
+
+### Kubernetes (Optional Example)
+
+```bash
+kubectl apply -f deploy/kubernetes/
+```
+
+See [deploy/kubernetes/](deploy/kubernetes/) for manifests.
+
+### Terraform (Optional Example)
+
+```bash
+cd deploy/terraform
+terraform init
+terraform plan -var-file=terraform.dev.tfvars
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+# All tests
+make test
+
+# With coverage
+make coverage
+
+# Specific package
+go test ./internal/usecase/...
+
+# Race detection
+go test -race ./...
+```
+
+---
+
+## 🔐 Security
+
+- Integrated security scanning (gosec, govulncheck, CodeQL)
+- Vulnerability notifications via Dependabot
+- Branch protection on main
+- Commit signing support
+
+See [SECURITY.md](SECURITY.md) for details.
+
+---
+
+## 📚 Documentation
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) — How to contribute
+- [SECURITY.md](SECURITY.md) — Security policy
+- [WORKFLOW.md](WORKFLOW.md) — Git workflow & branch protection
+- [Makefile](Makefile) — Build targets (run `make help`)
+
+---
+
+## 📄 License
+
+MIT License — See [LICENSE](LICENSE)
+
+---
+
+## 🎓 Learn More
+
+- [Cobra Framework](https://cobra.dev)
+- [Go Best Practices](https://golang.org/doc/effective_go)
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+
+---
+
+**Ready to build?** Fork this template and start coding! 🚀
 
 ### Design Patterns Included
 
