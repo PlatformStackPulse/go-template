@@ -1,0 +1,155 @@
+# Repository Branch Protection & Workflow Guide
+
+## GitHub Actions Status Checks
+
+Configure the following status checks on your main branch:
+
+### Required Status Checks
+
+1. **CI Pipeline Checks:**
+   - `ci / lint` — Code linting must pass
+   - `ci / test` — All tests must pass
+   - `ci / security` — Security scans must pass
+   - `ci / codeql` — CodeQL analysis
+   - `ci / commit-lint` — Commit messages must follow Conventional Commits
+   - `ci / build` — Build must succeed
+
+## Branch Protection Rules
+
+### For `main` branch:
+
+```yaml
+# Require pull request reviews before merging
+Require reviews: 1
+
+# Dismiss stale pull request approvals
+Dismiss stale PR approvals: true
+
+# Require status checks to pass before merging
+Require status checks:
+  - ci/lint
+  - ci/test
+  - ci/security
+  - ci/codeql
+  - ci/commit-lint
+  - ci/build
+
+# Require branches to be up to date before merging
+Require branches up to date: true
+
+# Include administrators
+Include administrators: false
+
+# Allow force pushes
+Allow force pushes: false
+
+# Allow deletions
+Allow deletions: false
+
+# Lockdown
+Lockdown: false (or true for restrictive mode)
+```
+
+### For other branches:
+
+- Allow direct commits to `develop` for minor updates
+- Require PRs for feature branches
+
+## Setup Instructions
+
+1. **Go to Repository Settings** → **Branches**
+2. **Click "Add rule"**
+3. **Configure for `main` branch:**
+   - Apply to administrators: ✅
+   - Require pull request reviews: 1 review ✅
+   - Dismiss stale reviews: ✅
+   - Require status checks: All CI checks ✅
+   - Require branches up to date: ✅
+
+## Automatic Remediation Workflows
+
+### 1. Auto-Update Dependencies
+- **Trigger:** Weekly
+- **Action:** Create PR with dependency updates
+- **Config:** `.github/workflows/dependencies.yml`
+
+### 2. Auto-Fix Formatting
+- **Trigger:** PR submission
+- **Action:** Suggest formatting fixes (not auto-commit)
+- **Config:** CI Pipeline
+
+### 3. Version Bumping
+- **Trigger:** Manual (workflow_dispatch)
+- **Action:** Bump version and create release
+- **Config:** `.github/workflows/version-bump.yml`
+
+## Recommended Workflow
+
+```
+main (protected)
+└── develop (semi-protected)
+    ├── feature/* (unprotected)
+    ├── bugfix/* (unprotected)
+    └── hotfix/* (unprotected)
+
+PR Flow:
+1. feature/* → PR → develop
+2. develop → PR → main (requires approval + checks)
+3. hotfix/* → PR → main (direct to main for urgent fixes)
+```
+
+## Additional Security Configurations
+
+### Dependabot Settings
+
+Enable in `Settings` → `Code security` → `Dependabot`:
+
+- ✅ Dependabot alerts
+- ✅ Dependabot security updates
+- ✅ Dependabot version updates
+
+Create `.github/dependabot.yml`:
+
+```yaml
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+```
+
+### Secret Scanning
+
+Enable in `Settings` → `Security`:
+
+- ✅ Push protection
+- ✅ Secret scanning for partner patterns
+
+### Code Scanning
+
+- ✅ CodeQL enabled (see `.github/workflows/codeql.yml`)
+- ✅ Alerts reviewed regularly
+
+## Deployment Considerations
+
+### Pre-Deployment Checklist
+
+- [ ] All tests pass
+- [ ] Security scans clear
+- [ ] Coverage maintained (≥70%)
+- [ ] Commits follow Conventional Commits
+- [ ] PR has approval
+- [ ] Branch is up to date with main
+
+### Release Process
+
+1. Create PR to main
+2. Await reviews and checks
+3. Merge to main
+4. Tag with version (`git tag v1.2.3`)
+5. Push tag (`git push origin v1.2.3`)
+6. Release workflow auto-triggers
+7. Artifacts published to GitHub Releases
+
+For more information, see [CONTRIBUTING.md](../CONTRIBUTING.md) and [README.md](../README.md).

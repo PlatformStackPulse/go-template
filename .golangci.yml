@@ -1,0 +1,52 @@
+version: "3"
+
+run:
+  timeout: 5m
+  tests: false
+  build-tags: ""
+  skip-dirs:
+    - vendor
+    - test
+
+linters-settings:
+  revive:
+    severity: error
+  govet:
+    shadow: true
+  misspell:
+    locale: US
+  gocyclo:
+    min-complexity: 10
+  dupl:
+    threshold: 100
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+
+linters:
+  enable:
+    - revive
+    - govet
+    - errcheck
+    - gosimple
+    - gocritic
+    - staticcheck
+    - ineffassign
+    - bodyclose
+    - sqlclosecheck
+    - vet
+    - gosec
+    - gocyclo
+    - misspell
+    - unparam
+    - stylecheck
+    - noctx
+    - exportloopref
+
+issues:
+  exclude-use-default: false
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gosec
+        - unparam
