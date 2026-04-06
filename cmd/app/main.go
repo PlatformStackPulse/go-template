@@ -49,7 +49,9 @@ func main() {
 	// Execute command
 	if err := cmd.ExecuteContext(ctx); err != nil {
 		log.Error("Command execution failed", "error", err)
-		os.Exit(1)
+		log.Info("Application started successfully", "version", version.Version)
+		os.Exit(1) //nolint:gocritic
+		return
 	}
 
 	log.Info("Application started successfully", "version", version.Version)

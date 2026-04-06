@@ -1,3 +1,4 @@
+// Package feature provides feature flag management.
 package feature
 
 import (

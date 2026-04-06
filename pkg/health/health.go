@@ -1,3 +1,4 @@
+// Package health provides health check functionality.
 package health
 
 import (

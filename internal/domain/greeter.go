@@ -1,3 +1,4 @@
+// Package domain contains core domain entities and interfaces.
 package domain
 
 // Greeter represents a greeter entity

@@ -4,9 +4,6 @@ run:
   timeout: 5m
   tests: false
   build-tags: ""
-  skip-dirs:
-    - vendor
-    - test
 
 linters-settings:
   revive:
@@ -34,17 +31,19 @@ linters:
     - ineffassign
     - bodyclose
     - sqlclosecheck
-    - vet
     - gosec
     - gocyclo
     - misspell
     - unparam
     - stylecheck
     - noctx
-    - exportloopref
+    - copyloopvar
 
 issues:
   exclude-use-default: false
+  exclude-dirs:
+    - vendor
+    - test
   exclude-rules:
     - path: _test\.go
       linters:
