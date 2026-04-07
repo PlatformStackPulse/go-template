@@ -1,11 +1,3 @@
-# CHANGELOG
-
-All notable changes to this project will be documented in this file.
-
-The format is generated from Conventional Commits using `git-chglog`.
-
-**Note**: Update this by running `make changelog` after releasing new versions. The CHANGELOG is auto-generated from commit history.
-
 <a name="unreleased"></a>
 ## [Unreleased]
 - No notable changes.
@@ -24,8 +16,13 @@ The format is generated from Conventional Commits using `git-chglog`.
 - centralise tests in test folder ([50fb00d](https://github.com/PlatformStackPulse/go-template/commit/50fb00d8717098b22d6c66b60d2ccab26c1d0f0e))
 
 ### Chores
+- review docs ([9355ab3](https://github.com/PlatformStackPulse/go-template/commit/9355ab32931c1a68e3c7ced5b20ee9cb42060770))
 - clean up old analysis.md ([28ddb24](https://github.com/PlatformStackPulse/go-template/commit/28ddb24d2dfd2823e4335947174426f2e7a33a36))
 - removed analysis file ([ada64bc](https://github.com/PlatformStackPulse/go-template/commit/ada64bc98b7139d6b9a327a59311a9bf6be7c0ac))
+
+### Documentation
+- review docs ([3b9a69b](https://github.com/PlatformStackPulse/go-template/commit/3b9a69b870d2f29c8be0e709e553f797701e2db7))
+- **changelog:** update CHANGELOG.md [skip ci] ([3707c11](https://github.com/PlatformStackPulse/go-template/commit/3707c11febd3238e443278ef41a25f6c11053ca8))
 
 ### Features
 - added structure version 1 ([81fc520](https://github.com/PlatformStackPulse/go-template/commit/81fc52055793b45b797f179bdcfbef724cd90813))
