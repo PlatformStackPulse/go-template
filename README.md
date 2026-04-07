@@ -31,8 +31,8 @@ A **minimal, reusable GitHub template** for building production-ready Go applica
 
 **What you don't get (keep it slim!):**
 - No bloated feature flag systems
-- No unused HTTP health endpoints
-- No example commands cluttering the codebase
+- No unused HTTP/health endpoints (add only if needed)
+- No example commands cluttering production code (we include one example to remove)
 - No over-engineered abstractions
 
 ---
@@ -56,6 +56,9 @@ make build
 
 ### Example: Add Your First Command
 
+The template includes an example command in `internal/cli/hello.go` (via `NewExampleCommand`). Replace it with your own:
+
+**1. Create your command:**
 ```go
 // internal/cli/mycommand.go
 package cli
@@ -67,19 +70,28 @@ import (
 
 func NewMyCommand(log *logger.Logger) *cobra.Command {
 	return &cobra.Command{
-		Use:   "mycommand",
-		Short: "What my command does",
-		Run: func(cmd *cobra.Command, args []string) {
+		Use:        "mycommand",
+		Short:      "What my command does",
+		Long:       "Detailed description of what my command does",
+		RunE: func(cmd *cobra.Command, args []string) error {
 			log.Info("Running mycommand")
 			// Your logic here
+			return nil
 		},
 	}
 }
 ```
 
-Then register in `cmd/app/main.go`:
+**2. Register in main.go:**
 ```go
+// cmd/app/main.go
 cmd.AddCommand(cli.NewMyCommand(log))
+```
+
+**3. Remove the example command:**
+```bash
+rm internal/cli/hello.go
+# Update cmd/app/main.go - remove the cli.NewExampleCommand line
 ```
 
 ---

@@ -7,15 +7,15 @@ Configure the following status checks on your main branch:
 ### Required Status Checks
 
 1. **CI Pipeline Checks:**
-  - `CI Pipeline / Lint & Format Check`
-  - `CI Pipeline / Test (1.21)`
-  - `CI Pipeline / Test (1.22)`
-  - `CI Pipeline / Security Scans`
-  - `CI Pipeline / Commit Lint`
-  - `CI Pipeline / Build`
+   - `CI Pipeline / Lint & Format Check`
+   - `CI Pipeline / Test (1.22)`
+   - `CI Pipeline / Test (1.23)`
+   - `CI Pipeline / Security Scans`
+   - `CI Pipeline / Commit Lint`
+   - `CI Pipeline / Build`
 
 2. **Code scanning check:**
-  - `CodeQL Analysis / Analyze`
+   - `CodeQL Analysis / Analyze`
 
 ## Branch Protection Rules
 
@@ -31,8 +31,8 @@ Dismiss stale PR approvals: true
 # Require status checks to pass before merging
 Require status checks:
   - CI Pipeline / Lint & Format Check
-  - CI Pipeline / Test (1.21)
   - CI Pipeline / Test (1.22)
+  - CI Pipeline / Test (1.23)
   - CI Pipeline / Security Scans
   - CI Pipeline / Commit Lint
   - CI Pipeline / Build
@@ -98,8 +98,8 @@ GITHUB_OWNER=PlatformStackPulse GITHUB_REPO=go-template BRANCH=main scripts/appl
 Use this exact list when selecting required status checks for branch protection on `main`:
 
 1. CI Pipeline / Lint & Format Check
-2. CI Pipeline / Test (1.21)
-3. CI Pipeline / Test (1.22)
+2. CI Pipeline / Test (1.22)
+3. CI Pipeline / Test (1.23)
 4. CI Pipeline / Security Scans
 5. CI Pipeline / Commit Lint
 6. CI Pipeline / Build
