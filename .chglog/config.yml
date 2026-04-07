@@ -28,7 +28,7 @@ options:
       build: Build
       test: Tests
   header:
-    pattern: "^(\w*)(?:\((.*)\))?!?:\s(.*)$"
+    pattern: '^(\w*)(?:\((.*)\))?!?:\s(.*)$'
     pattern_maps:
       - Type
       - Scope
