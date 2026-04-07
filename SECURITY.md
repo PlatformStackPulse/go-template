@@ -23,10 +23,33 @@ Please include:
 
 This project uses the following security scanning tools:
 
-- **gosec** — Detects security issues
-- **govulncheck** — Checks for known vulnerabilities
-- **CodeQL** — Static analysis
-- **Dependabot** — Dependency updates and vulnerability alerts
+- **gosec** — Go security checker (detects unsafe code patterns)
+- **govulncheck** — Vulnerability checker for Go dependencies
+- **CodeQL** — SIEM code analysis and vulnerability detection
+- **Dependabot** — Automated dependency updates and vulnerability alerts
+
+### Running Locally
+
+```bash
+# Security scan (gosec)
+make security
+
+# Vulnerability check (govulncheck)
+make sec-update
+
+# All security and dev setup
+make dev-setup      # Installs all tools
+make security       # Run security scan
+make sec-update     # Check for vulnerabilities
+```
+
+### CI/CD Integration
+
+Security scans run automatically on:
+- Every pull request
+- Before merge to main
+- Weekly scheduled scan
+- On push to main
 
 ## Disclosure Timeline
 

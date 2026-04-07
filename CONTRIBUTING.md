@@ -143,16 +143,65 @@ make lint
 
 ### File Organization
 
+The template follows Clean Architecture principles:
+
 ```
 internal/
-├── domain/         # Domain entities
-├── usecase/        # Business logic
-├── adapter/        # External integrations
-├── cli/            # CLI commands
-├── config/         # Configuration
-├── feature/        # Feature flags
-└── logger/         # Logging
+├── domain/         # Pure business entities (no external deps)
+│   └── greeter.go  # Example: Domain entity with business logic
+├── usecase/        # Business logic orchestration
+│   └── greeting.go # Example: Orchestrates domain + adapters
+├── adapter/        # External integrations (database, HTTP, etc)
+│   └── (empty - add as needed)
+├── cli/            # CLI interface layer
+│   ├── root.go     # Root command
+│   └── hello.go    # Example command
+├── config/         # Configuration loading
+├── logger/         # Structured logging
+└── errors/         # Error types (if needed)
+
+test/
+├── unit/           # Unit tests (mirrors internal/)
+│   ├── domain/
+│   ├── usecase/
+│   ├── cli/
+│   └── config/
+└── integration/    # Integration/end-to-end tests
 ```
+
+### Testing in Each Layer
+
+**Domain Layer (Pure Business Logic)**
+```go
+// test/unit/domain/greeter_test.go
+func TestGreeterGreet(t *testing.T) {
+    tests := []struct {
+        name     string
+        input    string
+        expected string
+    }{
+        {name: "greet with name", input: "Alice", expected: "Hello, Alice!"},
+        {name: "greet without name", input: "", expected: "Hello, World!"},
+    }
+    
+    for _, tc := range tests {
+        t.Run(tc.name, func(t *testing.T) {
+            greeter := domain.NewGreeter(tc.input)
+            assert.Equal(t, tc.expected, greeter.Greet())
+        })
+    }
+}
+```
+
+**Usecase Layer (Orchestration)**
+- Mock adapters/repositories
+- Verify business logic flow
+- Test error handling
+
+**CLI Layer**
+- Mock logger and usecase
+- Test command parsing and flags
+- Verify output format
 
 ## Documentation
 
@@ -196,6 +245,59 @@ internal/
 - [ ] Documentation updated
 - [ ] No breaking changes (or documented if breaking)
 - [ ] Commits follow Conventional Commits
+
+## Adding Features
+
+### Adding a New CLI Command
+
+1. Create command file in `internal/cli/`:
+```go
+// internal/cli/mycommand.go
+package cli
+
+import (
+    "github.com/spf13/cobra"
+    "github.com/PlatformStackPulse/go-template/internal/logger"
+)
+
+func NewMyCommand(log *logger.Logger) *cobra.Command {
+    return &cobra.Command{
+        Use:   "mycommand",
+        Short: "Description",
+        RunE: func(cmd *cobra.Command, args []string) error {
+            log.Info("Command started")
+            // Your logic here
+            return nil
+        },
+    }
+}
+```
+
+2. Register in `cmd/app/main.go`:
+```go
+cmd.AddCommand(cli.NewMyCommand(log))
+```
+
+3. Add tests in `test/unit/cli/`:
+```go
+func TestMyCommand(t *testing.T) {
+    // Test command execution
+}
+```
+
+### Adding Domain Logic
+
+1. Define entity in `internal/domain/`
+2. Create usecase in `internal/usecase/`
+3. Write unit tests for both
+4. Update CLI to use the usecase
+
+### Coverage Requirements
+
+- **Minimum**: 70% coverage required
+- **Target**: 80%+ coverage for new code
+- Check coverage locally: `make coverage`
+- View report: `open coverage.html`
 
 ## Code Review Process
 

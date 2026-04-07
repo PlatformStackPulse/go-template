@@ -2,13 +2,54 @@
 
 A **slim, production-ready** Go project template for CLI tools and API servers.
 
-## 📊 What's Included
+## 📊 Actual Project Stats
 
-- **Go Files**: 13 (core + tests)
-- **Workflows**: 6 (CI, release, dependencies, CodeQL, version bump, changelog)
-- **Config Files**: 10+ (Makefile, Docker, Terraform, K8s examples)
-- **Documentation**: Clean and focused guides
-- **Test Coverage**: Enforced at 70% minimum
+- **Go Files**: 13 (8 source + 5 test files)
+- **Main Codebase**: ~300 LOC (without tests)
+- **Test Coverage**: 70%+ enforced
+- **Workflows**: 6 GitHub Actions workflows
+- **Dependencies**: 2 main (spf13/cobra, testify)
+
+## 📁 Core File Structure Breakdown
+
+```
+go-template/
+├── cmd/app/main.go                    # Entry point (30 lines)
+├── internal/
+│   ├── cli/
+│   │   ├── root.go                   # Root command setup
+│   │   └── hello.go                  # Example command (NewExampleCommand)
+│   ├── config/config.go              # Config loading (env vars)
+│   ├── domain/greeter.go             # Pure domain entity
+│   ├── logger/logger.go              # Structured logging wrapper
+│   ├── usecase/greeting.go           # Business logic orchestration
+│   └── adapter/                      # (Empty - add as needed)
+├── pkg/
+│   ├── health/health.go              # Health check helpers
+│   └── version/version.go            # Version injected at build
+├── test/
+│   ├── unit/
+│   │   ├── cli/commands_test.go
+│   │   ├── config/config_test.go
+│   │   ├── domain/greeter_test.go
+│   │   ├── usecase/greeting_test.go
+│   │   ├── logger/logger_test.go (etc)
+│   └── integration/app/flow_test.go
+├── deploy/
+│   ├── kubernetes/
+│   │   ├── deployment.yaml
+│   │   └── service.yaml
+│   └── terraform/
+│       ├── main.tf
+│       ├── variables.tf
+│       └── terraform.dev.tfvars
+├── .github/workflows/                 # 6 CI/CD workflows
+├── scripts/                           # Setup and build scripts
+├── Makefile                          # 20+ build targets
+├── Dockerfile                        # Multi-stage production-ready
+├── docker-compose.yml                # Local dev environment
+└── go.mod                           # Go 1.23+
+```
 
 ## 📁 Streamlined Project Structure
 
@@ -73,23 +114,38 @@ go-template/
 
 Each layer is **independent and testable**.
 
-### 2. **Two Modes: CLI or API**
+### 2. **CLI-First Design (Extensible to API)**
 
-#### CLI Mode (Default)
+The template is **CLI-first** but extensible for API mode:
+
+**Current (CLI-Only):**
 ```go
-// Minimal main.go
-cfg := config.Load()
-log := logger.NewLogger(cfg.Debug)
-cmd := cli.NewRootCommand(log)
-cmd.ExecuteContext(ctx)
+// cmd/app/main.go
+func main() {
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to load config: %v\n", err)
+		os.Exit(1)
+	}
+
+	log := logger.NewLogger(cfg.Debug)
+	cmd := cli.NewRootCommand(log)
+	cmd.Version = version.Version
+	cmd.AddCommand(cli.NewExampleCommand(log))
+
+	ctx := context.Background()
+	if err := cmd.ExecuteContext(ctx); err != nil {
+		log.Error("Command execution failed", "error", err)
+		os.Exit(1)
+	}
+}
 ```
 
-#### API Mode (Extend as Needed)
-```go
-// Add HTTP server in main.go
-srv := &http.Server{...}
-srv.ListenAndServe()
-```
+**To add API mode:**
+1. Create `internal/http/server.go` with HTTP handlers
+2. Add health check endpoints using `pkg/health/`
+3. Start both CLI and HTTP server in main.go (or use flags to choose)
+4. Update Dockerfile to expose port 8080
 
 ### 3. **Structured Logging**
 - Uses Go 1.21+ `slog` package
@@ -103,11 +159,35 @@ srv.ListenAndServe()
 - Extensible design
 - Ready for YAML/env file support
 
-### 5. **Testing Framework**
-- Unit tests (table-driven patterns)
-- Integration test scaffolding
-- Testify for assertions
-- 70% coverage enforcement in CI
+### 5. **Testing Framework (Table-Driven Patterns)**
+
+The project uses **testify** and **table-driven tests** for clarity:
+
+```go
+// Example: test/unit/domain/greeter_test.go
+func TestGreeterGreet(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{name: "greet with name", input: "Alice", expected: "Hello, Alice!"},
+		{name: "greet without name", input: "", expected: "Hello, World!"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			greeter := domain.NewGreeter(tc.input)
+			assert.Equal(t, tc.expected, greeter.Greet())
+		})
+	}
+}
+```
+
+- **Unit tests**: In `test/unit/` mirror internal structure
+- **Integration tests**: In `test/integration/` for full flows
+- **Coverage enforcement**: 70% minimum in CI
+- **Coverage report**: `make coverage` generates HTML report
 
 ### 6. **Security & DevSecOps**
 - **Linting**: golangci-lint (13 linters enabled)
